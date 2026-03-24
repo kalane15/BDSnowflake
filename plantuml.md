@@ -29,7 +29,7 @@ skinparam stereotypeFontSize 11
 ' ========== DIMENSION TABLES ==========
 
 class dim_customer <<dim>> {
-    + sale_customer_id : INT <<PK>>
+    + sale_customer_id : SERIAL <<PK>>
     --
     customer_first_name : VARCHAR(100)
     customer_last_name : VARCHAR(100)
@@ -42,7 +42,7 @@ class dim_customer <<dim>> {
 }
 
 class dim_customer_pet <<dim>> {
-    + customer_pet_id : INT <<PK>>
+    + customer_pet_id : SERIAL <<PK>>
     --
     customer_pet_type : VARCHAR(50)
     customer_pet_name : VARCHAR(100)
@@ -50,7 +50,7 @@ class dim_customer_pet <<dim>> {
 }
 
 class dim_seller <<dim>> {
-    + sale_seller_id : INT <<PK>>
+    + sale_seller_id : SERIAL <<PK>>
     --
     seller_first_name : VARCHAR(100)
     seller_last_name : VARCHAR(100)
@@ -62,7 +62,7 @@ class dim_seller <<dim>> {
 ' ========== FACT TABLE ==========
 
 class fact_sales <<fact>> {
-    + id : INT <<PK>>
+    + id : SERIAL <<PK>>
     --
     sale_product_id : INT <<FK>>
     sale_seller_id : INT <<FK>>
@@ -76,7 +76,7 @@ class fact_sales <<fact>> {
 ' ========== DIMENSION TABLES (CONTINUED) ==========
 
 class dim_product <<dim>> {
-    + sale_product_id : INT <<PK>>
+    + sale_product_id : SERIAL <<PK>>
     --
     product_supplier_id : INT <<FK>>
     product_name : VARCHAR(200)
@@ -96,7 +96,7 @@ class dim_product <<dim>> {
 }
 
 class dim_store <<dim>> {
-    + sale_store_id : INT <<PK>>
+    + sale_store_id : SERIAL <<PK>>
     --
     store_name : VARCHAR(200)
     store_location : VARCHAR(200)
@@ -108,7 +108,7 @@ class dim_store <<dim>> {
 }
 
 class dim_supplier <<dim>> {
-    + product_supplier_id : INT <<PK>>
+    + product_supplier_id : SERIAL <<PK>>
     --
     supplier_name : VARCHAR(200)
     supplier_contact : VARCHAR(200)
@@ -122,16 +122,16 @@ class dim_supplier <<dim>> {
 ' ========== RELATIONSHIPS ==========
 
 ' Связи измерений с факт-таблицей
-fact_sales "*" --> "1" dim_customer : belongs to
-fact_sales "*" --> "1" dim_seller : processed by
-fact_sales "*" --> "1" dim_product : contains
-fact_sales "*" --> "1" dim_store : sold at
+fact_sales ||--|| dim_customer : belongs to
+fact_sales ||--|| dim_seller : processed by
+fact_sales ||--|| dim_product : contains
+fact_sales ||--|| dim_store : sold at
 
 ' Связи между измерениями
-dim_customer "1" --> "0..*" dim_customer_pet : has pet
-dim_product "0..*" --> "1" dim_supplier : supplied by
+dim_customer ||--o{ dim_customer_pet : has pet
+dim_supplier ||--o{ dim_product : supplies
 
-' ========== РАСПОЛОЖЕНИЕ (ФАКТ В ЦЕНТРЕ) ==========
+' ========== РАСПОЛОЖЕНИЕ ==========
 
 ' Размещаем измерения вокруг факт-таблицы
 ' Верх: dim_customer и dim_customer_pet
@@ -147,12 +147,5 @@ dim_seller -[hidden]l- fact_sales
 ' Право: dim_product и dim_supplier
 fact_sales -[hidden]r- dim_product
 dim_product -[hidden]r- dim_supplier
-
-' ========== КОММЕНТАРИИ ==========
-
-note bottom of dim_customer
-  <b>Измерения</b>
-  <color:#388E3C>Описательные атрибуты</color>
-end note
 
 @enduml
