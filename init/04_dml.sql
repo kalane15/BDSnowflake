@@ -170,8 +170,12 @@ JOIN dim_product p
     AND p.product_price = m.product_price
 JOIN dim_seller s
     ON m.seller_email = s.seller_email
+    AND m.seller_first_name = s.seller_first_name 
+    AND m.seller_last_name = s.seller_last_name
 JOIN dim_customer c
     ON m.customer_email = c.customer_email
+    AND m.customer_first_name = c.customer_first_name
+    AND m.customer_last_name = c.customer_last_name
 JOIN dim_store st
     ON m.store_name = st.store_name
     AND st.store_email = m.store_email;
