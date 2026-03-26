@@ -46,7 +46,7 @@ INSERT INTO dim_seller (
     seller_country,
     seller_postal_code
 )
-SELECT DISTINCT ON (m.seller_first_name, m.seller_last_name)
+SELECT DISTINCT ON (m.seller_email)
     seller_first_name,
     seller_last_name,
     seller_email,
@@ -97,7 +97,6 @@ INSERT INTO dim_product (
     product_expiry_date
 )
 SELECT DISTINCT ON (m.product_name,
-    m.product_category,
     m.product_price,
     m.product_quantity,
     m.product_weight,
@@ -105,7 +104,6 @@ SELECT DISTINCT ON (m.product_name,
     m.product_size,
     m.product_brand,
     m.product_material)
-
     s.product_supplier_id,
     m.product_name,
     m.product_category,
@@ -178,7 +176,6 @@ JOIN dim_product p
     ON m.product_name = p.product_name
     AND p.product_price = m.product_price
     AND m.product_name = p.product_name
-    AND m.product_price = p.product_price
     AND m.product_quantity = p.product_quantity
     AND m.product_weight = p.product_weight
     AND m.product_color = p.product_color
