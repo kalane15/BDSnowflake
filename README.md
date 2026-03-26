@@ -6,6 +6,7 @@
 Запуск:
 
 docker compose up -d
+
 Войти в контейнер для запросов:
 
 docker exec -it lab1_highload psql -U postgres
