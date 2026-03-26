@@ -148,7 +148,7 @@ INSERT INTO dim_store (
     store_phone,
     store_email
 )
-SELECT DISTINCT
+SELECT DISTINCT ON (m.store_email)
     store_name,
     store_location,
     store_city,
@@ -156,7 +156,7 @@ SELECT DISTINCT
     store_country,
     store_phone,
     store_email
-FROM mock_data
+FROM mock_data m
 WHERE store_name IS NOT NULL
 ON CONFLICT DO NOTHING;
 
