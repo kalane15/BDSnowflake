@@ -21,7 +21,7 @@ INSERT INTO dim_customer (
     customer_pet_id,
     pet_category
 )
-SELECT DISTINCT
+SELECT DISTINCT ON (m.customer_email)
     m.customer_first_name,
     m.customer_last_name,
     m.customer_age,
@@ -31,7 +31,7 @@ SELECT DISTINCT
     p.customer_pet_id,
     m.pet_category
 FROM mock_data m
-LEFT JOIN dim_customer_pet p
+JOIN dim_customer_pet p
     ON m.customer_pet_type = p.customer_pet_type
    AND m.customer_pet_name = p.customer_pet_name
    AND m.customer_pet_breed = p.customer_pet_breed;
@@ -46,13 +46,13 @@ INSERT INTO dim_seller (
     seller_country,
     seller_postal_code
 )
-SELECT DISTINCT
+SELECT DISTINCT ON (m.seller_first_name, m.seller_last_name)
     seller_first_name,
     seller_last_name,
     seller_email,
     seller_country,
     seller_postal_code
-FROM mock_data;
+FROM mock_data m;
 
 -- =========================
 -- 4. SUPPLIERS
@@ -96,7 +96,16 @@ INSERT INTO dim_product (
     product_release_date,
     product_expiry_date
 )
-SELECT DISTINCT
+SELECT DISTINCT ON (m.product_name,
+    m.product_category,
+    m.product_price,
+    m.product_quantity,
+    m.product_weight,
+    m.product_color,
+    m.product_size,
+    m.product_brand,
+    m.product_material)
+
     s.product_supplier_id,
     m.product_name,
     m.product_category,
@@ -113,7 +122,7 @@ SELECT DISTINCT
     m.product_release_date,
     m.product_expiry_date
 FROM mock_data m
-LEFT JOIN dim_supplier s
+JOIN dim_supplier s
     ON m.supplier_name = s.supplier_name
    AND m.supplier_email = s.supplier_email;
 
@@ -156,7 +165,7 @@ INSERT INTO fact_sales (
     sale_total_price,
     sale_date
 )
-SELECT
+SELECT DISTINCT
     p.sale_product_id,
     s.sale_seller_id,
     c.sale_customer_id,
@@ -168,6 +177,14 @@ FROM mock_data m
 JOIN dim_product p
     ON m.product_name = p.product_name
     AND p.product_price = m.product_price
+    AND m.product_name = p.product_name
+    AND m.product_price = p.product_price
+    AND m.product_quantity = p.product_quantity
+    AND m.product_weight = p.product_weight
+    AND m.product_color = p.product_color
+    AND m.product_size = p.product_size
+    AND m.product_brand = p.product_brand
+    AND m.product_material = p.product_material
 JOIN dim_seller s
     ON m.seller_email = s.seller_email
     AND m.seller_first_name = s.seller_first_name 
