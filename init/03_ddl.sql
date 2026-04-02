@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS dim_customer (
     customer_pet_id INT,
     pet_category VARCHAR(100),
     --
-    CONSTRAINT uk_customer_email UNIQUE (customer_email),
+    CONSTRAINT uk_customer_email UNIQUE (customer_first_name, customer_last_name, customer_email),
     FOREIGN KEY (customer_pet_id) REFERENCES dim_customer_pet(customer_pet_id)
 );
 
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS dim_product (
     product_release_date VARCHAR(20),
     product_expiry_date VARCHAR(20),
     --
-    CONSTRAINT uk_product UNIQUE (product_name, product_price, product_brand, product_color, product_size, product_material),
+    CONSTRAINT uk_product UNIQUE (product_name, product_price, product_brand, product_color, product_size, product_material, product_supplier_id),
     FOREIGN KEY (product_supplier_id) REFERENCES dim_supplier(product_supplier_id)
 );
 
