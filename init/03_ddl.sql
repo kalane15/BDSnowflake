@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS dim_customer_pet (
     customer_pet_type VARCHAR(50),
     customer_pet_name VARCHAR(100),
     customer_pet_breed VARCHAR(100),
-    --
+    -- 
     CONSTRAINT uk_customer_pet UNIQUE (customer_pet_type, customer_pet_name, customer_pet_breed)
 );
 
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS dim_customer (
     customer_postal_code VARCHAR(20),
     customer_pet_id INT,
     pet_category VARCHAR(100),
-    -- Бизнес-ключ: email клиента (уникальный идентификатор)
+    --
     CONSTRAINT uk_customer_email UNIQUE (customer_email),
     FOREIGN KEY (customer_pet_id) REFERENCES dim_customer_pet(customer_pet_id)
 );
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS dim_seller (
     seller_country VARCHAR(100),
     seller_postal_code VARCHAR(20),
     --
-    CONSTRAINT uk_seller_email UNIQUE ( seller_first_name,  seller_last_name, seller_email)
+    CONSTRAINT uk_seller_email UNIQUE (seller_first_name, seller_last_name, seller_email)
 );
 
 CREATE TABLE IF NOT EXISTS dim_supplier (
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS dim_supplier (
     supplier_city VARCHAR(100),
     supplier_country VARCHAR(100),
     --
-    CONSTRAINT uk_supplier_email UNIQUE (supplier_name, supplier_email),
+    CONSTRAINT uk_supplier_email UNIQUE (supplier_name, supplier_email)
 );
 
 CREATE TABLE IF NOT EXISTS dim_product (
